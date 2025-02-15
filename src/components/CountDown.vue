@@ -1,7 +1,7 @@
 <template>
   <div class="countdown-container">
     <div class="image-container">
-      <img class="pico-image" src="../assets/png/PICO-PARK-2.png" alt="pico pico">
+      <img class="pico-image" src="@/assets/images/png/PICO-PARK-2.png" alt="pico pico">
     </div>
     <h1 class="countdown-title">
       {{ messageView }}
@@ -44,6 +44,7 @@ const unitLabels: Record<string, string> = {
   seconds: "Segundos"
 };
 
+let timer = ref();
 const calculateTimeLeft = () => {
   const difference = new Date(props.targetDate).getTime() - new Date().getTime();
   if (difference > 0) {
@@ -56,7 +57,6 @@ const calculateTimeLeft = () => {
   }
 };
 
-let timer = ref();
 onMounted(() => {
   messageView.value = props.message.toUpperCase();
   finalDay.value = new Date(props.targetDate).toLocaleDateString();
@@ -75,18 +75,28 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
+  justify-content: flex-start;
+  // height: calc(100vh - 80px);
+  width: 100vw;
   background: linear-gradient(180deg, #6a11cb, #2575fc);
   color: white;
   box-sizing: border-box;
-  overflow: auto;
-  padding: 20px;
+  padding: 60px 20px 20px;
 }
 
 .pico-image {
   width: 200px;
   height: auto;
+  animation: jump 1s infinite;
+}
+
+@keyframes jump {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  } 
 }
 
 .countdown-title {

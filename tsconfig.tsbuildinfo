@@ -1,1 +1,0 @@
-{"root":["./vite.config.ts","./src/app.vue","./src/main.ts","./src/vite-env.d.ts","./src/components/countdown.vue","./src/services/api.ts","./src/stores/counter.ts","./src/stores/user.ts"],"version":"5.7.3"}
