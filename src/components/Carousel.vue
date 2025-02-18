@@ -15,28 +15,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { supabase } from "@/supabase";
+import { ref, onMounted, onUnmounted, onBeforeMount } from "vue";
 
-const images = ref([
-  new URL('@/assets/images/jpg/image-1.jpg', import.meta.url).href,
-  // new URL('@/assets/images/jpg/image-2.jpg', import.meta.url).href,
-  // new URL('@/assets/images/jpg/image-3.jpg', import.meta.url).href,
-  // new URL('@/assets/images/jpg/image-4.jpg', import.meta.url).href,
-  // new URL('@/assets/images/jpg/image-5.jpg', import.meta.url).href,
-  // new URL('@/assets/images/jpg/image-6.jpg', import.meta.url).href,
-  // new URL('@/assets/images/jpg/image-7.jpg', import.meta.url).href,
-  new URL('@/assets/images/jpg/image-8.jpg', import.meta.url).href,
-  // new URL('@/assets/images/jpg/image-9.jpg', import.meta.url).href,
-  new URL('@/assets/images/jpg/image-10.jpg', import.meta.url).href,
-  // new URL('@/assets/images/jpg/image-11.jpg', import.meta.url).href,
-  new URL('@/assets/images/jpg/image-12.jpg', import.meta.url).href,
-  new URL('@/assets/images/jpg/image-13.jpg', import.meta.url).href,
-  new URL('@/assets/images/jpg/image-14.jpg', import.meta.url).href,
-  new URL('@/assets/images/jpg/image-15.jpg', import.meta.url).href,
-  new URL('@/assets/images/jpg/image-16.jpg', import.meta.url).href,
-  new URL('@/assets/images/jpg/image-17.jpg', import.meta.url).href,
-  new URL('@/assets/images/jpg/image-18.jpg', import.meta.url).href,
-]);
+onBeforeMount(() => {
+  fetchImages();
+})
+
+const images = ref<string[]>([]);
+
+const fetchImages = async () => {
+  const bucketName = import.meta.env.VITE_SUPABASE_BUCKET;
+  const { data, error } = await supabase.storage.from(bucketName).list("", {
+    limit: 100,
+  });
+
+  if (error) {
+    console.error("Erro ao buscar imagens:", error.message);
+    return;
+  }
+
+  images.value = data.map((img) => (`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${bucketName}/${img.name}`));
+};
 
 const currentIndex = ref(0);
 let autoSlideInterval: any = null;

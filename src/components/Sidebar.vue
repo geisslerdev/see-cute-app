@@ -7,7 +7,7 @@
         </button>
         <ul>
           <li v-for="item in menuItems" :key="item.text">
-            <a :href="item.link">{{ item.text }}</a>
+            <a @click="routerTo(item.route)">{{ item.text }}</a>
             <div class="divider"></div>
           </li>
         </ul>
@@ -20,17 +20,25 @@
 import { useSidebarStore } from "@/stores/sidebar";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const SIDEBAR_STORE = useSidebarStore();
+const ROUTER = useRouter();
 
 const isOpen = storeToRefs(SIDEBAR_STORE).getSideBarState;
 const menuItems = ref([
-  { text: "Galeria", link: "#" },
+  { text: "Home", route: "home" },
+  { text: "Galeria", route: "gallery" },
 ]);
 
-const toggleSidebar = () => {
+function toggleSidebar(): void {
   SIDEBAR_STORE.setStateSidebar(!SIDEBAR_STORE.getSideBarState);
 };
+
+function routerTo(route: string): void {
+  ROUTER.push(route);
+  toggleSidebar();
+}
 </script>
 
 <style lang="scss">
