@@ -87,4 +87,5 @@ onMounted(fetchImages);
   width: 100%;
   border-radius: 5px;
 }
+
 </style>
